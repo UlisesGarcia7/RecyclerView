@@ -73,7 +73,7 @@ public class activity_alumno_alta extends AppCompatActivity{
 
                     Aplicacion.alumnos.get(posicion).setMatricula(alumno.getMatricula());
                     Aplicacion.alumnos.get(posicion).setNombre(alumno.getNombre());
-                    Aplicacion.alumnos.get(posicion).setGrado(alumno.getGrados());
+                    Aplicacion.alumnos.get(posicion).setGrados(alumno.getGrados());
                     Toast.makeText(getApplicationContext(), "Se modifico con exito", Toast.LENGTH_SHORT).show();
                 }
             }
