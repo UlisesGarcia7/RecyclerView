@@ -7,10 +7,10 @@ public class Alumno implements Serializable {
     private int id;
     private String carrera;
     private String nombre;
-    private int img;
+    private Integer img;
     private String matricula;
 
-    public Alumno(int id, String carrera, String nombre, int img, String matricula) {
+    public Alumno(int id, String carrera, String nombre, Integer img, String matricula) {
         this.setId(id);
         this.setGrados(carrera);
         this.setNombre(nombre);
