@@ -24,7 +24,6 @@ public class AlumnosDb implements Persistencia, Proyeccion{
         this.context = context;
         this.helper = new AlumnoDbHelper(this.context);
     }
-
     public void openDataBase(){
         db = helper.getWritableDatabase();
     }
@@ -46,10 +45,10 @@ public class AlumnosDb implements Persistencia, Proyeccion{
     @Override
     public long insertAlumno(Alumno alumno){
         ContentValues values = new ContentValues();
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_MATRICULA,alumno.getMatricula());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_NOMBRE,alumno.getNombre());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_CARRERA,alumno.getGrados());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_FOTO,alumno.getImg());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_MATRICULA,alumno.getMatricula());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_NOMBRE,alumno.getNombre());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_CARRERA,alumno.getGrados());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_FOTO,alumno.getImg());
         this.openDatabase();
         long num = db.insert(DefineTabla.Alumnos.TABLE_NAME,null,values);
         this.closeDataBase();
@@ -57,36 +56,36 @@ public class AlumnosDb implements Persistencia, Proyeccion{
         return num;
     }
 
-    @Override
-    public long updateAlumno(Alumno alumno){
+    public long updateAlumno(Alumno alumno) {
         ContentValues values = new ContentValues();
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_MATRICULA,alumno.getMatricula());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_NOMBRE,alumno.getNombre());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_CARRERA,alumno.getGrados());
-        values.put(DefineTabla.Alumnos.COLUMN_TABLE_FOTO,alumno.getImg());
-        this.openDatabase();
-        long num = db.update(DefineTabla.Alumnos.TABLE_NAME,values,DefineTabla.Alumnos.COLUMN_TABLE_ID + " = " + alumno.getId(),null);
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_MATRICULA,alumno.getMatricula());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_NOMBRE,alumno.getNombre());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_CARRERA,alumno.getGrados());
+        values.put(DefineTabla.Alumnos.COLUMN_NAME_FOTO,alumno.getImg());
+        this.openDataBase();
+        long num = db.update(DefineTabla.Alumnos.TABLE_NAME,
+                values, DefineTabla.Alumnos.COLUMN_NAME_ID + " = " +alumno.getId(), null);
         this.closeDataBase();
         return num;
     }
     @Override
     public void deleteAlumno(int id){
         this.openDatabase();
-        db.delete(DefineTabla.Alumnos.TABLE_NAME,DefineTabla.Alumnos.COLUMN_TABLE_ID + "=?",new String[]{String.valueOf(id)});
+        db.delete(DefineTabla.Alumnos.TABLE_NAME,DefineTabla.Alumnos.COLUMN_NAME_ID + "=?",new String[]{String.valueOf(id)});
         this.closeDatabase();
     }
     @Override
     public Alumno getAlumno(String matricula){
         db = helper.getReadableDatabase();
         Cursor cursor = db.query(DefineTabla.Alumnos.TABLE_NAME,DefineTabla.Alumnos.REGISTRO,
-                DefineTabla.Alumnos.COLUMN_TABLE_ID + " = ?", new String[]{matricula}, null,null,null);
+                DefineTabla.Alumnos.COLUMN_NAME_ID + " = ?", new String[]{matricula}, null,null,null);
+        cursor.moveToFirst();
         Alumno alumno = readAlumno(cursor);
         return alumno;
     }
     @Override
     public ArrayList<Alumno> allAlumnos(){
         db = helper.getReadableDatabase();
-
         Cursor cursor = db.query(DefineTabla.Alumnos.TABLE_NAME, DefineTabla.Alumnos.REGISTRO,null,null,null,null,null);
         ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
         cursor.moveToFirst();
@@ -101,10 +100,11 @@ public class AlumnosDb implements Persistencia, Proyeccion{
     @Override
     public Alumno readAlumno(Cursor cursor) {
         Alumno alumno = new Alumno();
-        //alumno.setId(cursor.getInt(0));
-        //alumno.setMatricula(cursor.getString(1));
-        //alumno.setNombre(cursor.getString(2));
-        //alumno.setGrados(cursor.getString(3));
+        alumno.setId(cursor.getInt(0));
+        alumno.setMatricula(cursor.getString(1));
+        alumno.setNombre(cursor.getString(2));
+        alumno.setGrados(cursor.getString(3));
+        alumno.setImg(cursor.getString(4));
         return alumno;
     }
 }

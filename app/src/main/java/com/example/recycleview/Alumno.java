@@ -7,10 +7,10 @@ public class Alumno implements Serializable {
     private int id;
     private String carrera;
     private String nombre;
-    private Integer img;
+    private String img;
     private String matricula;
 
-    public Alumno(int id, String carrera, String nombre, Integer img, String matricula) {
+    public Alumno(int id, String carrera, String nombre, String img, String matricula) {
         this.setId(id);
         this.setGrados(carrera);
         this.setNombre(nombre);
@@ -42,11 +42,11 @@ public class Alumno implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -57,7 +57,7 @@ public class Alumno implements Serializable {
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
-
+    /*
     public static ArrayList<Alumno> llenarAlumnos(){
         ArrayList<Alumno> alumnos = new ArrayList<>();
         String carrera = "Ing. Tec. de la Informacion";
@@ -72,5 +72,5 @@ public class Alumno implements Serializable {
         alumnos.add(new Alumno(9,carrera, "OSUNA HIGUERA ALEJANDRO", R.drawable.a09, "2018030121"));
         alumnos.add(new Alumno(10,carrera, "MARIN GALINDO KIMBERLY VANESSA", R.drawable.a10, "2018030133"));
         return alumnos;
-    }
+    } */
 }

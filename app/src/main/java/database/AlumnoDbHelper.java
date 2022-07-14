@@ -5,16 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AlumnoDbHelper extends SQLiteOpenHelper {
-    private static final String TEXT_TYPE = "TEXT";
-    private static final String INTEGER_TYPE = "INTEGER";
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INTEGER_TYPE = " INTEGER";
     private static final String COMMAT_SEP = " ,";
 
     private static final String SQL_CREATE_ALUMNO = "CREATE TABLE " + DefineTabla.Alumnos.TABLE_NAME + " (" +
-            DefineTabla.Alumnos.COLUMN_TABLE_ID + " INTEGER PRIMARY KEY, " +
-            DefineTabla.Alumnos.COLUMN_TABLE_MATRICULA + TEXT_TYPE + COMMAT_SEP +
-            DefineTabla.Alumnos.COLUMN_TABLE_NOMBRE + TEXT_TYPE + COMMAT_SEP +
-            DefineTabla.Alumnos.COLUMN_TABLE_CARRERA + TEXT_TYPE + COMMAT_SEP +
-            DefineTabla.Alumnos.COLUMN_TABLE_FOTO + INTEGER_TYPE + ")";
+            DefineTabla.Alumnos.COLUMN_NAME_ID + " INTEGER PRIMARY KEY, " +
+            DefineTabla.Alumnos.COLUMN_NAME_MATRICULA + TEXT_TYPE + COMMAT_SEP +
+            DefineTabla.Alumnos.COLUMN_NAME_NOMBRE + TEXT_TYPE + COMMAT_SEP +
+            DefineTabla.Alumnos.COLUMN_NAME_CARRERA + TEXT_TYPE + COMMAT_SEP +
+            DefineTabla.Alumnos.COLUMN_NAME_FOTO + INTEGER_TYPE + ")";
 
     private static final String SQL_DELETE_ALUMNO  = "DROP TABLE IF EXISTS " + DefineTabla.Alumnos.TABLE_NAME;
 

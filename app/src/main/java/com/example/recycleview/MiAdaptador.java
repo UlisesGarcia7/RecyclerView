@@ -1,6 +1,7 @@
 package com.example.recycleview;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,10 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> im
         Alumno alumno = listaAlumnos.get(position);
         holder.txtMatricula.setText(alumno.getMatricula());
         holder.txtNombre.setText(alumno.getNombre());
-        holder.idImagen.setImageResource(alumno.getImg());
+        holder.txtCarrera.setText(alumno.getGrados());
+        Uri img = Uri.parse(alumno.getImg());
+        holder.idImagen.setImageURI(img);
+
     }
 
     @Override
@@ -56,7 +60,6 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> im
         private TextView txtNombre;
         private TextView txtMatricula;
         private TextView txtCarrera;
-
         private ImageView idImagen;
 
         public ViewHolder(@NonNull View itemView){
@@ -64,7 +67,6 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.ViewHolder> im
             txtNombre = (TextView) itemView.findViewById(R.id.txtAlumnoNombre);
             txtMatricula = (TextView) itemView.findViewById(R.id.txtMatricula);
             txtCarrera = (TextView) itemView.findViewById(R.id.txtCarrera);
-
             idImagen = (ImageView) itemView.findViewById(R.id.foto);
         }
     }

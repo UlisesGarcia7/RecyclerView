@@ -5,12 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity_alumno_alta">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingConstraints">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtId"
+            android:text="Id: ">
+        </TextView>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblNombre"
-            android:text="Matricula">
+            android:text="Nombre de alumno">
         </TextView>
         <EditText
             android:layout_width="match_parent"
@@ -43,6 +52,13 @@
             android:src="@drawable/us01"
             android:id="@+id/imgAlumno">
         </ImageView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Imagen"
+            android:layout_gravity="center"
+            android:id="@+id/btnCargarImagen">
+        </Button>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,6 +91,13 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Borrar"
+                    android:id="@+id/btnBorrar"
+                    android:layout_span="2">
+                </Button>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Regresar"
                     android:id="@+id/btnRegresar"
                     android:layout_span="2">
@@ -83,5 +106,5 @@
         </TableLayout>
         
     </LinearLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
