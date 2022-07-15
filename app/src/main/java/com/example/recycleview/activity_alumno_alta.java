@@ -3,7 +3,9 @@ package com.example.recycleview;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,7 +23,7 @@ import database.AlumnoDbHelper;
 import database.AlumnosDb;
 
 public class activity_alumno_alta extends AppCompatActivity{
-    private TextView lblMatricula, lblNombre, lblFoto, txtId;
+    //private TextView lblMatricula, lblNombre, lblFoto, txtId;
     private EditText txtMatricula, txtNombre, txtGrado;
     private Button btnGuardar, btnRegresar, btnCargarImagen, btnBorrar;
     private ImageView imgAlumno;
@@ -29,7 +31,6 @@ public class activity_alumno_alta extends AppCompatActivity{
     private Alumno alumno;
     private String carrera = "Ing. Tec. Informacion";
     private int posicion;
-    private int seleccionarImagen;
 
     private AlumnoDbHelper helper = new AlumnoDbHelper(this);
     private AlumnosDb alumnoDb = new AlumnosDb(this, helper);
@@ -38,10 +39,10 @@ public class activity_alumno_alta extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alumno_alta);
-        lblMatricula = (TextView) findViewById(R.id.lblMatricula);
-        lblNombre = (TextView) findViewById(R.id.lblNombre);
-        lblFoto = (TextView) findViewById(R.id.lblFoto);
-        txtId = (TextView) findViewById(R.id.txtId);
+        //lblMatricula = (TextView) findViewById(R.id.lblMatricula);
+        //lblNombre = (TextView) findViewById(R.id.lblNombre);
+        //lblFoto = (TextView) findViewById(R.id.lblFoto);
+        //txtId = (TextView) findViewById(R.id.txtId);
         txtMatricula = (EditText) findViewById(R.id.txtMatricula);
         txtNombre = (EditText) findViewById(R.id.txtNombre);
         txtGrado = (EditText) findViewById(R.id.txtGrado);
@@ -64,22 +65,28 @@ public class activity_alumno_alta extends AppCompatActivity{
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(alumno == null){
+                if(alumno == null || posicion == -1){
                     // Agregar un nuevo alumno
                     alumno = new Alumno();
                     alumno.setGrados(txtGrado.getText().toString());
                     alumno.setMatricula(txtMatricula.getText().toString());
                     alumno.setNombre(txtNombre.getText().toString());
-                    alumno.setImg(img.toString());
+                    //alumno.setImg(img.toString());
                     //alumno.setImg(R.drawable.us01);
 
                     if(validar()){
-                        Aplicacion.getAlumnos().add(alumno);
-                        alumnoDb.openDataBase();
-                        alumnoDb.insertAlumno(alumno);
-                        alumnoDb.closeDataBase();
-                        setResult(Activity.RESULT_OK);
-                        finish();
+                        if(img != null){
+                            alumno.setImg(img.toString());
+                            Aplicacion.getAlumnos().add(alumno);
+                            alumnoDb.openDataBase();
+                            alumnoDb.insertAlumno(alumno);
+                            alumnoDb.closeDataBase();
+                            setResult(Activity.RESULT_OK);
+                            Toast.makeText(getApplicationContext(), "Registro Capturado", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Faltan capturar datos", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
                         Toast.makeText(getApplicationContext(), "Faltan capturar datos", Toast.LENGTH_SHORT).show();
                         txtMatricula.requestFocus();
@@ -90,21 +97,25 @@ public class activity_alumno_alta extends AppCompatActivity{
                     alumno.setMatricula(txtMatricula.getText().toString());
                     alumno.setNombre(txtNombre.getText().toString());
                     alumno.setGrados(txtGrado.getText().toString());
-
-                    if(seleccionarImagen == 1){
+                    if (img != null) {
                         alumno.setImg(img.toString());
                     }
 
-                    Aplicacion.alumnos.get(posicion).setMatricula(alumno.getMatricula());
-                    Aplicacion.alumnos.get(posicion).setNombre(alumno.getNombre());
-                    Aplicacion.alumnos.get(posicion).setGrados(alumno.getGrados());
-                    Aplicacion.getAlumnos().get(posicion).setImg(alumno.getImg());
+                    if(txtNombre.getText().toString().equals("") || txtMatricula.getText().toString().equals("") ||
+                            txtGrado.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Faltan capturar datos", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Aplicacion.alumnos.get(posicion).setMatricula(alumno.getMatricula());
+                        Aplicacion.alumnos.get(posicion).setNombre(alumno.getNombre());
+                        Aplicacion.alumnos.get(posicion).setGrados(alumno.getGrados());
+                        Aplicacion.getAlumnos().get(posicion).setImg(alumno.getImg());
 
-                    alumnoDb.openDatabase();
-                    alumnoDb.updateAlumno(alumno);
-                    alumnoDb.closeDatabase();
-
-                    Toast.makeText(getApplicationContext(), "Se modifico con exito", Toast.LENGTH_SHORT).show();
+                        alumnoDb.openDatabase();
+                        alumnoDb.updateAlumno(alumno);
+                        alumnoDb.closeDatabase();
+                        Toast.makeText(getApplicationContext(), "Registro Actualizado", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             }
         });
@@ -113,11 +124,29 @@ public class activity_alumno_alta extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(posicion >= 0){
-                    Aplicacion.alumnos.remove(posicion);
-                    alumnoDb.openDataBase();
-                    alumnoDb.deleteAlumno(alumno.getId());
-                    alumnoDb.closeDataBase();
-                    finish();
+                    AlertDialog.Builder confirmar = new AlertDialog.Builder(activity_alumno_alta.this);
+                    confirmar.setTitle("¿Desea eliminar el registro?");
+                    confirmar.setMessage("Se eliminara el registro de manera permanente");
+                    confirmar.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Aplicacion.alumnos.remove(posicion);
+                            alumnoDb.openDataBase();
+                            alumnoDb.deleteAlumno(alumno.getId());
+                            alumnoDb.closeDataBase();
+                            Toast.makeText(getApplicationContext(), "Registro Eliminado", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+                    confirmar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nada
+                        }
+                    });
+                    confirmar.show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No Hay Registro Por Eliminar", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -134,20 +163,19 @@ public class activity_alumno_alta extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 cargarImagen();
-                seleccionarImagen = 1;
             }
         });
     }
     private void cargarImagen(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), 200);
+        startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), 10);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 200) {
+            if (requestCode == 10) {
                 Uri path = data.getData();
                 if (null != path) {
                     imgAlumno.setImageURI(path);
@@ -165,7 +193,6 @@ public class activity_alumno_alta extends AppCompatActivity{
         if(txtNombre.getText().toString().equals("")) exito = false;
         if(txtMatricula.getText().toString().equals("")) exito = false;
         if(txtGrado.getText().toString().equals("")) exito = false;
-
         return exito;
     }
 
