@@ -23,7 +23,8 @@ import database.AlumnoDbHelper;
 import database.AlumnosDb;
 
 public class activity_alumno_alta extends AppCompatActivity{
-    //private TextView lblMatricula, lblNombre, lblFoto, txtId;
+    //private TextView lblMatricula, lblNombre, txtId;
+    private TextView lblFoto;
     private EditText txtMatricula, txtNombre, txtGrado;
     private Button btnGuardar, btnRegresar, btnCargarImagen, btnBorrar;
     private ImageView imgAlumno;
@@ -41,7 +42,7 @@ public class activity_alumno_alta extends AppCompatActivity{
         setContentView(R.layout.activity_alumno_alta);
         //lblMatricula = (TextView) findViewById(R.id.lblMatricula);
         //lblNombre = (TextView) findViewById(R.id.lblNombre);
-        //lblFoto = (TextView) findViewById(R.id.lblFoto);
+        lblFoto = (TextView) findViewById(R.id.lblFoto);
         //txtId = (TextView) findViewById(R.id.txtId);
         txtMatricula = (EditText) findViewById(R.id.txtMatricula);
         txtNombre = (EditText) findViewById(R.id.txtNombre);
@@ -60,6 +61,7 @@ public class activity_alumno_alta extends AppCompatActivity{
             txtNombre.setText(alumno.getNombre());
             txtGrado.setText(alumno.getGrados());
             imgAlumno.setImageURI(Uri.parse(alumno.getImg()));
+            lblFoto.setText("Url Foto: " + alumno.getImg());
         }
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +181,7 @@ public class activity_alumno_alta extends AppCompatActivity{
                 Uri path = data.getData();
                 if (null != path) {
                     imgAlumno.setImageURI(path);
+                    lblFoto.setText(path.toString());
                     img = path;
                     ContentResolver cr = getApplicationContext().getContentResolver();
                     cr.takePersistableUriPermission(img, Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -193,6 +196,7 @@ public class activity_alumno_alta extends AppCompatActivity{
         if(txtNombre.getText().toString().equals("")) exito = false;
         if(txtMatricula.getText().toString().equals("")) exito = false;
         if(txtGrado.getText().toString().equals("")) exito = false;
+        if(lblFoto.getText().toString().equals("")) exito = false;
         return exito;
     }
 
